@@ -2,17 +2,17 @@ import requests
 import concurrent.futures
 
 
-code = """#include<stdio.h>
-int main(){
-
-printf("mohamed");
-return 0;}
+code = """public class code {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}
 """
-language = "cpp"
+language = "java"
 
 # Define the function to send a single request
 def send_request():
-    url = 'http://localhost:5000/run_code'
+    url = 'http://localhost:8000/run_code'
     payload = {
         'code': code,
         'language': language

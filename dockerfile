@@ -1,22 +1,20 @@
-FROM ubuntu:latest
+FROM python:3.9-slim
 
-# Install various compilers and interpreters
+# Install required system dependencies for compilers
 RUN apt-get update && apt-get install -y \
-    python3 \
-    default-jdk \
-    php \
-    gcc \
-    g++ \
-    nodejs \
-    curl \
-    python3-flask  # Install Flask using apt \
-    mysql \
+    gcc g++ openjdk-11-jdk php-cli nodejs dotnet-sdk-6.0 && \
+    apt-get clean
 
-# Copy the code execution server script
-COPY code_exec_server.py /code_exec_server.py
+# Set working directory
+WORKDIR /app
 
-# Expose port for communication
+# Copy the current app directory to the container
+COPY ./api.py /app
+# Install Python dependencies
+RUN pip install --no-cache-dir fastapi uvicorn pydantic
+
+# Expose the port FastAPI will run on
 EXPOSE 5000
 
-# Start the Flask server
-CMD ["python3", "/code_exec_server.py"]
+# Command to run the FastAPI app with Uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
